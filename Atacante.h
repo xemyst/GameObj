@@ -1,4 +1,4 @@
-class Atacante
+class Atacante : public Robo
 {
     
 }

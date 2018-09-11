@@ -1,0 +1,4 @@
+class Golero : public Robo
+{
+    
+}

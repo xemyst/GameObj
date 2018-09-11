@@ -1,0 +1,4 @@
+class Defensor : public Robo
+{
+    
+}

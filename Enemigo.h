@@ -1,0 +1,4 @@
+class Enemigo : public GameObj
+{
+    
+}
