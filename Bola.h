@@ -1,0 +1,4 @@
+class Bola : public GameObj
+{
+    
+}
