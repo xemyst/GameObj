@@ -1,7 +1,7 @@
 #ifndef ENEMIGO_H
 #define ENEMIGO_H
-
-class Enemigo
+#include <GameObj.h>
+class Enemigo: public GameObj
 {
 public:
     Enemigo();

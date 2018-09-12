@@ -6,7 +6,10 @@ class Defensor : public Robo
 {
 public:
     Defensor();
+    Defensor(Robo antiguo);
     ~Defensor();
+    int getTpe() override;
+public:
 
 };
 

@@ -5,7 +5,9 @@ class Atacante : public Robo
 {
 public:
     Atacante();
+    Atacante(Robo robo);
     ~Atacante();
+   int getTpe() override;
 
 };
 

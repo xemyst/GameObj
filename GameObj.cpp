@@ -1,5 +1,5 @@
 #include "GameObj.h"
-
+#include <string>
 
 GameObj::GameObj()
 {
@@ -10,7 +10,9 @@ GameObj::~GameObj()
 }
 
 int GameObj::objDistance(GameObj object){
-    return getX() - object.getX();
+    int result;
+    result = sqrt( (getX() - object.getX()) * (getX()-object.getX()) + (getY() -object.getY()) * (getY() - object.getY())); 
+    return result;
 }
 
 int GameObj:: getX(){
@@ -29,3 +31,7 @@ void GameObj::setY(int y){
     this->y = y;
 }
 
+void GameObj::update(int x, int y){
+    this-> x = x;
+    this -> y = y;
+}

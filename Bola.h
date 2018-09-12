@@ -6,6 +6,7 @@ class Bola : public GameObj
 {
 public:
     Bola();
+    Bola(int x, int y);
     ~Bola();
 
 };

@@ -3,8 +3,17 @@
 Atacante::Atacante()
 {
 }
-
+Atacante::Atacante(Robo antiguo)
+{
+    setX(antiguo.getX());
+    setY(antiguo.getY());
+    
+}
 Atacante::~Atacante()
 {
+}
+
+int Atacante::getTpe(){
+    return 2;
 }
 

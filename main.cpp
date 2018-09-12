@@ -2,18 +2,38 @@
 #include <iostream>
 #include <GameObj.h>
 #include <Bola.h>
-#include <Defensor.h>
+#include <Enemigo.h>
 #include <Robo.h>
+#include <Defensor.h>
+#include <Golero.h>
+#include <Atacante.h>
+
 
 int main(int argc, char **argv)
 {
 	printf("hello world \n");
-    GameObj obj[2];
-    obj[0] = Bola();
-    obj[0].setX(20);
-    obj[0].setY(40);
-    Robo j;
-    j.setX(80);
-    std::cout << j.objDistance(obj[0]);
+    Bola bola = Bola(40,50);
+    Robo *equipo = new Robo[6];
+    Enemigo *enemigos = new Enemigo[6];
+    
+    //init alies, width this all the alies can see the ball position, enemies, and alies
+    for(int x = 0; x < 6; x++){
+        equipo[x].setBola(&bola);
+        equipo[x].setEnemigos(enemigos);
+        equipo[x].setEquipo(equipo);
+    }
+    
+    //the team never lose the index of other partner
+    equipo[1].update(80,50);
+    equipo[0].whereAlie(1);
+    equipo[1] = Atacante(equipo[1]);
+    equipo[0].whereAlie(1);
+    equipo[1].update(39,90);
+    equipo[0].whereAlie(1);
+    equipo[1] = Defensor(equipo[1]);
+    equipo[0].whereAlie(1);
+    equipo[1].update(39,694);
+    equipo[0].whereAlie(1);
+    
     return 0;
 }
