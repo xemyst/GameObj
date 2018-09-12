@@ -1,0 +1,1 @@
+./Debug/Golero.cpp.o ./Debug/Atacante.cpp.o ./Debug/Enemigo.cpp.o ./Debug/Defensor.cpp.o ./Debug/Bola.cpp.o ./Debug/main.cpp.o ./Debug/GameObj.cpp.o ./Debug/Robo.cpp.o
