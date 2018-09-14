@@ -12,8 +12,3 @@ Atacante::Atacante(Robo antiguo)
 Atacante::~Atacante()
 {
 }
-
-int Atacante::getTpe(){
-    return 2;
-}
-

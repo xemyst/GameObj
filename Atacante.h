@@ -7,7 +7,6 @@ public:
     Atacante();
     Atacante(Robo robo);
     ~Atacante();
-   int getTpe() override;
 
 };
 

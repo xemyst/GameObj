@@ -15,6 +15,11 @@ public:
     void setX(int x);
     void setY(int y);
     void update(int x, int y);
+    
+    struct fieldPoint{
+        int x;
+        int y;
+    }
 };
 
 #endif // GAMEOBJ_H

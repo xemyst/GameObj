@@ -15,6 +15,7 @@ int main(int argc, char **argv)
     Bola bola = Bola(40,50);
     Robo *equipo = new Robo[6];
     Enemigo *enemigos = new Enemigo[6];
+    Robo masperto = Robo();
     
     //init alies, width this all the alies can see the ball position, enemies, and alies
     for(int x = 0; x < 6; x++){

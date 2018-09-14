@@ -13,8 +13,3 @@ Defensor::Defensor(Robo antiguo)
 Defensor::~Defensor()
 {
 }
-
-int Defensor::getTpe(){
-    return 1;
-}
-
