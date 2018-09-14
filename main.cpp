@@ -33,6 +33,9 @@ int main(int argc, char **argv)
     equipo[1] = Defensor(equipo[1]);
     equipo[0].whereAlie(1);
     equipo[1].update(39,694);
+    bola.update(60,50);
+    enemigos[1].update(90,80);
+    equipo[0].where();
     equipo[0].whereAlie(1);
     
     return 0;
