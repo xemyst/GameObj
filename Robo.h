@@ -1,9 +1,10 @@
 #ifndef ROBO_H
 #define ROBO_H
 #include <iostream>
-#include <GameObj.h>
-#include <Bola.h>
-#include <Enemigo.h>
+#include "GameObj.h"
+#include "Bola.h"
+#include "Enemigo.h"
+
 class Robo : public GameObj
 {
 public:
@@ -12,7 +13,7 @@ public:
     ~Robo();
     void setBola(Bola *ball);
     void where();
-    void whereEnemigo(int id);clTabCtrl
+    void whereEnemigo(int id);
     void whereAlie(int id);
     void setEnemigos(Enemigo enemigos[6]);
     void setEquipo(Robo equipo[6]);
@@ -23,8 +24,8 @@ private:
     Robo *equipo;
     int vmax = 15;
     
-    struct params movimento{
-      int R, L, speed_z, speed_x
+    struct params_movimento{
+      int R, L, speed_z, speed_x;
       bool verifica = 0;
     };
 };

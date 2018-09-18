@@ -1,5 +1,4 @@
 #include "Robo.h"
-
 Robo::Robo(Robo *antiguo)
 {
 }
@@ -8,7 +7,7 @@ Robo::Robo()
 {
 }
 
-
+fieldPoint Robo::a_estrela();
 
 Robo::~Robo()
 {
@@ -32,36 +31,56 @@ void Robo::whereEnemigo(int id){
     std::cout << "id: " << id << "X: " << enemigos[id].getX() << " Y: "<< enemigos[id].getY()<< '\n';
 }
 void Robo::whereAlie(int id){
-    std::cout <<"type: " <<  equipo[id].getTpe() <<" id: " << id << " X: " << equipo[id].getX() << " Y: "<< equipo[id].getY()<< '\n';
+    std::cout <<"type: " <<  equipo[id].getType() <<" id: " << id << " X: " << equipo[id].getX() << " Y: "<< equipo[id].getY()<< '\n';
 }
 void Robo::move(int x, int y){
-    struct fieldPoint menorCamino = a_estrela();
-    moveRobot(menorCamino);
+    fieldPoint menorCaminho = a_estrela();
+    moveRobot(menorCaminho);
 }
 
-struct fieldPoint Robo::a_estrela(){
+fieldPoint Robo::a_estrela(){
     bool obstacle;
-    
-    mapSquares(); //crear 8 caminos (NOT DONE)
-    for(int x = 0; x < 8; x++){
-        obstacle = checkPath(obstaculo, camino);//(NOT DONE)
+    fieldPoint menorCaminho;
+	int menorPath = 100000;
+
+    fieldPoint *paths = mapSquares(); //crear 8 caminos (NOT DONE)
+    for(int x = 0; x < sizeof(paths); x++){
+        obstacle = checkPath(obstaculo, paths[x]);//(NOT DONE)
     
         if(!obstacle){
-            distance_prox = objDistance(camino(candidato));
-            distance_final = camino.objDistance(bola);
+            distance_prox = objDistance(paths[x]);
+            distance_final = paths[x].objDistance(bola);
             distance = distance_prox + distance_final;
         }
-    
-        if(ditance < menorPath){
-            //marcar este candidato como menor;
+    	
+        if(distance < menorPath){
+            menorPath = distance;
+	    menorCaminho = paths[x]
         }
     }
     
     
-    return menorCamino;
+    return menorCaminho;
 }
 
-void moveRobot(struct fieldPoint manorCamino){
+fieldPoint mapSquares(){
+
+ fieldPoint *paths = new fieldPoint[8];
+ int params = 180;
+ 
+ paths[0].update(getX()-params,getY()+params); 
+ paths[1].update(getX(),getY()+params);        
+ paths[2].update(getX()+params,getY()+params); 
+ paths[3].update(getX()+params,getY());        
+ paths[4].update(getX()+params,getY()-params); 
+ paths[5].update(getX(),getY()-params);        
+ paths[6].update(getX()-params,getY()-params); 
+ paths[7].update(getX()-params,getY());        
+
+ return paths;
+}
+
+void moveRobot(fieldPoint manorCaminho){ 
     
     PID pid_motor_dereito;
     PID pid_motor_esquerdo;
@@ -84,8 +103,7 @@ void moveRobot(struct fieldPoint manorCamino){
     float theta, angulo, dist, vr, vl, modTheta;
     
     
-    dist = objDistance(puntoFinal);//hasta el final
-    
+    dist = objDistance(puntoFinal);//Cada posiçao, (Atacante, defensor) possuira seu ponto final. Atacante = bola, Defensor = linha de defesa
     angulo = (180/M_PI)*atan2(caminoY - getY(), caminoX - getX());
     theta = angulo - getTheta()*(180/M_PI);
     
@@ -124,4 +142,3 @@ void moveRobot(struct fieldPoint manorCamino){
     }
     
 }
-
