@@ -4,6 +4,7 @@
 #include "GameObj.h"
 #include "Bola.h"
 #include "Enemigo.h"
+#include "FieldPoint.h"
 
 class Robo : public GameObj
 {
@@ -18,6 +19,10 @@ public:
     void setEnemigos(Enemigo enemigos[6]);
     void setEquipo(Robo equipo[6]);
     void move(int x, int y);
+	FieldPoint a_estrela(int toX, int toY);
+	void moveRobot(FieldPoint menorCaminho);
+	FieldPoint* mapSquares();
+	bool checkPath(GameObj one, GameObj two);
 private:
     Bola *bola;
     Enemigo *enemigos;

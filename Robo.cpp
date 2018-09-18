@@ -7,8 +7,6 @@ Robo::Robo()
 {
 }
 
-fieldPoint Robo::a_estrela();
-
 Robo::~Robo()
 {
 }
@@ -30,32 +28,33 @@ void Robo::where(){
 void Robo::whereEnemigo(int id){
     std::cout << "id: " << id << "X: " << enemigos[id].getX() << " Y: "<< enemigos[id].getY()<< '\n';
 }
-void Robo::whereAlie(int id){
-    std::cout <<"type: " <<  equipo[id].getType() <<" id: " << id << " X: " << equipo[id].getX() << " Y: "<< equipo[id].getY()<< '\n';
-}
-void Robo::move(int x, int y){
-    fieldPoint menorCaminho = a_estrela();
+void Robo::move(int toX, int toY){
+	int x = this->getX();
+	int y = this->getY();
+    FieldPoint menorCaminho = a_estrela(x,y);
     moveRobot(menorCaminho);
 }
 
-fieldPoint Robo::a_estrela(){
+FieldPoint Robo::a_estrela(int x, int y){
     bool obstacle;
-    fieldPoint menorCaminho;
+    FieldPoint menorCaminho;
+	int distance;
 	int menorPath = 100000;
 
-    fieldPoint *paths = mapSquares(); //crear 8 caminos (NOT DONE)
+    FieldPoint *paths;
+	paths= mapSquares(x, y); //crear 8 caminos (NOT DONE)
     for(int x = 0; x < sizeof(paths); x++){
-        obstacle = checkPath(obstaculo, paths[x]);//(NOT DONE)
+        obstacle = checkPath(enemigos[x], paths[x]);//(NOT DONE)
     
         if(!obstacle){
-            distance_prox = objDistance(paths[x]);
-            distance_final = paths[x].objDistance(bola);
+            int distance_prox = objDistance(paths[x]);
+            int distance_final = paths[x].objDistance(*bola);
             distance = distance_prox + distance_final;
         }
     	
         if(distance < menorPath){
             menorPath = distance;
-	    menorCaminho = paths[x]
+	    menorCaminho = paths[x];
         }
     }
     
@@ -63,24 +62,28 @@ fieldPoint Robo::a_estrela(){
     return menorCaminho;
 }
 
-fieldPoint mapSquares(){
+bool Robo::checkPath(GameObj one, GameObj two){
+	return true;
+}
 
- fieldPoint *paths = new fieldPoint[8];
+FieldPoint* mapSquares(int x, int y){
+
+ FieldPoint *paths = new FieldPoint[8];
  int params = 180;
  
- paths[0].update(getX()-params,getY()+params); 
- paths[1].update(getX(),getY()+params);        
- paths[2].update(getX()+params,getY()+params); 
- paths[3].update(getX()+params,getY());        
- paths[4].update(getX()+params,getY()-params); 
- paths[5].update(getX(),getY()-params);        
- paths[6].update(getX()-params,getY()-params); 
- paths[7].update(getX()-params,getY());        
+ paths[0].update( x-params,y+params); 
+ paths[1].update( x,y+params);        
+ paths[2].update( x+params,y+params); 
+ paths[3].update( x+params,y);        
+ paths[4].update( x+params,y-params); 
+ paths[5].update( x,y-params);        
+ paths[6].update( x-params,y-params); 
+ paths[7].update( x-params,y);        
 
  return paths;
 }
 
-void moveRobot(fieldPoint manorCaminho){ 
+void moveRobot(FieldPoint manorCaminho){ 
     
     PID pid_motor_dereito;
     PID pid_motor_esquerdo;

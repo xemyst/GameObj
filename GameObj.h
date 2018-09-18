@@ -3,10 +3,10 @@
 #include <math.h>
 class GameObj
 {
-private:
-    int x;
-    int y;
+
 public:
+int x;
+    int y;
     GameObj();
     ~GameObj();
     int objDistance(GameObj object);
@@ -19,7 +19,7 @@ public:
     struct fieldPoint{
         int x;
         int y;
-    }
+    };
 };
 
 #endif // GAMEOBJ_H
