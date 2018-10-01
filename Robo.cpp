@@ -11,137 +11,94 @@ Robo::~Robo()
 {
 }
 
-void Robo::setBola(Bola *bola){
-    this->bola = bola;
-}
+bool Robo::check(float pathX, float pathY, float RoboX, float RoboY)
+{
+   int params = 270;
 
-void Robo::setEnemigos(Enemigo enemigos[6]){
-    this-> enemigos = enemigos;
-}
-void Robo::setEquipo(Robo equipo[6]){
-    this-> equipo = equipo;
-}
-
-void Robo::where(){
-    std::cout << "X: " << bola->getX() << " Y: "<< bola->getY()<< '\n';
-}
-void Robo::whereEnemigo(int id){
-    std::cout << "id: " << id << "X: " << enemigos[id].getX() << " Y: "<< enemigos[id].getY()<< '\n';
-}
-void Robo::move(int toX, int toY){
-	int x = this->getX();
-	int y = this->getY();
-    FieldPoint menorCaminho = a_estrela(x,y);
-    moveRobot(menorCaminho);
-}
-
-FieldPoint Robo::a_estrela(int x, int y){
-    bool obstacle;
-    FieldPoint menorCaminho;
-	int distance;
-	int menorPath = 100000;
-
-    FieldPoint *paths;
-	paths= mapSquares(x, y); //crear 8 caminos (NOT DONE)
-    for(int x = 0; x < sizeof(paths); x++){
-        obstacle = checkPath(enemigos[x], paths[x]);//(NOT DONE)
-    
-        if(!obstacle){
-            int distance_prox = objDistance(paths[x]);
-            int distance_final = paths[x].objDistance(*bola);
-            distance = distance_prox + distance_final;
-        }
-    	
-        if(distance < menorPath){
-            menorPath = distance;
-	    menorCaminho = paths[x];
-        }
-    }
-    
-    
-    return menorCaminho;
-}
-
-bool Robo::checkPath(GameObj one, GameObj two){
-	return true;
-}
-
-FieldPoint* mapSquares(int x, int y){
-
- FieldPoint *paths = new FieldPoint[8];
- int params = 180;
- 
- paths[0].update( x-params,y+params); 
- paths[1].update( x,y+params);        
- paths[2].update( x+params,y+params); 
- paths[3].update( x+params,y);        
- paths[4].update( x+params,y-params); 
- paths[5].update( x,y-params);        
- paths[6].update( x-params,y-params); 
- paths[7].update( x-params,y);        
-
- return paths;
-}
-
-void moveRobot(FieldPoint manorCaminho){ 
-    
-    PID pid_motor_dereito;
-    PID pid_motor_esquerdo;
-    
-    //init PID
-    pid_motor_dereito.Init(0.04,0.0,0.0);
-    pid_motor_esquerdo.Init(-0.04,0.0,0.0);
-    
-    //variaves de set point (SP) e control Variable(CV)
-    double SP = 0.0, CV_motor_direito = 0.0, CV_motor_esquerdo = 0.0;
-    
-    //struct{
-    //chute 
-    movimento.speed_z = 0;
-    movimento.speed_x = 0;
-    //
-    //}
-    int PID_value;
-    
-    float theta, angulo, dist, vr, vl, modTheta;
-    
-    
-    dist = objDistance(puntoFinal);//Cada posiçao, (Atacante, defensor) possuira seu ponto final. Atacante = bola, Defensor = linha de defesa
-    angulo = (180/M_PI)*atan2(caminoY - getY(), caminoX - getX());
-    theta = angulo - getTheta()*(180/M_PI);
-    
-    //ajusta ho angulo
-    while(theta > 180) theta -= 360;
-    while(theta < -180) theta += 360;
-    
-    modTheta = fabs(theta);
-    
-    
-    CV_motor_dereito = pid_motor_dereito.UpdateOutput(SP, theta, vmax);
-    CV_motor_esquerdo = pid_motor_esquerdo.UpdateOutput(SP, theta, vmax);
-    
-    if(dist <= 270)
+    if ((RoboX < ((pathX)+params)) && (RoboX  > ((pathX)-params)) && (RoboY < ((pathY)+params)) && (RoboY > ((pathY)-params)))
     {
-        PID_value = 0;
-    }else{
-        PID_value = 1;
+        return 1;
     }
-    
-    vl = PID_value * CV_motor_esquerdo;
-    vr = PID_value * CV_motor_dereito;
-    
-    
-    movimento.R = vr;
-    movimento.L = vl;
-    
-    //comando para gsim
-    command(true,id,-vr,-vr,vl,vl,movimento.speed_x, movimento.speed_z)
-    
-    if(Dist <= 180)
+    else
     {
-        movimento.verifica = 1;
-    }else{
-        movimento.verifica = 0;
+        return 0;
     }
-    
 }
+
+struct Robo::FieldSquares Robo::aEstrela(float RoboX, float RoboY, float RoboTheta, float BolaX, float BolaY)
+{
+int params = 180;
+struct FieldSquares path[8];
+struct FieldSquares menorCaminho;
+
+path[0].X = (RoboX - params);
+path[0].Y = (RoboY + params);
+path[1].X = (RoboX);
+path[1].Y = (RoboY + params);
+path[2].X = (RoboX + params);
+path[2].Y = (RoboY + params);
+path[3].X = (RoboX + params);
+path[3].Y = (RoboY);
+path[4].X = (RoboX + params);
+path[4].Y = (RoboY - params);
+path[5].X = (RoboX);
+path[5].Y = (RoboY - params);
+path[6].X = (RoboX - params);
+path[6].Y = (RoboY - params);
+path[7].X = (RoboX - params);
+path[7].Y = (RoboY);
+
+float menor=100000, f;
+    float Dist_Prox,Dist_Final;
+
+    for (int i=0;i < 8; i++)
+    {
+        for (int j = 0; j < 6;j++)
+        {
+            float ObstaculoAzulX = Azul[j].getX();
+            float ObstaculoAzulY = Azul[j].getY();
+	    float ObstaculoAmareloX = Amarelo[j].getX();
+            float ObstaculoAmareloY = Amarelo[j].getY();
+            bool checkBlue = Robo::check(path[i].X, path[i].Y, ObstaculoAzulX, ObstaculoAzulY);
+	    bool checkYellow = Robo::check(path[i].X, path[i].Y, ObstaculoAmareloX, ObstaculoAmareloY);
+
+            if (checkBlue == true || checkYellow == true)
+            {
+            f = 150000;/*coloca um valor muito alto, para o caminho que tiver obstaculo ser desconsiderado*/
+            }
+            else
+            {
+                Dist_Prox = sqrt((RoboX - path[i].X)*(RoboX - path[i].X) + (RoboY - path[i].Y)*(RoboY - path[i].Y));//distancia do proximo ponto
+                Dist_Final = sqrt( (path[i].X - BolaX)*(path[i].X - BolaX) + (path[i].Y - BolaY)*(path[i].Y - BolaY) );//distancia do final
+                f = Dist_Prox + Dist_Final;
+            }
+
+            if (f < menor)
+            {
+                menor = f;
+                menorCaminho.X = path[i].X;
+                menorCaminho.Y = path[i].Y;
+	    }
+        }
+    }
+
+    return (menorCaminho);
+}
+
+void Robo::Menor_caminho_Update(struct FieldSquares Cordenadas)
+{
+Robo::Menor_caminho.X = Cordenadas.X;
+Robo::Menor_caminho.Y = Cordenadas.Y;
+}
+
+float Robo::getMenor_caminhoX()
+{
+return Robo::Menor_caminho.X;
+}
+
+float Robo::getMenor_caminhoY()
+{
+return Robo::Menor_caminho.Y;
+} 
+
+
